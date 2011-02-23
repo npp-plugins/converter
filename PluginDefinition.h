@@ -108,7 +108,7 @@ public:
 	bool toAscii();
 };
 
-void ascii2hex(bool insertSpace, bool isMaj);
+void ascii2hex(bool insertSpace, bool isMaj, size_t nbCharPerLine);
 void ascii2Hex();
 int getTrueHexValue(char c);
 void hex2Ascii();

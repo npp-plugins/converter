@@ -103,7 +103,7 @@ HWND getCurrentScintillaHandle() {
 
 void ascii2Hex()
 {
-    ascii2hex(true, false);
+    ascii2hex(true, false, 8);
 	//ascii2hex(false, true);
 }
 
@@ -262,34 +262,73 @@ bool HexString::toAscii()
 	return true;
 }
 
-void ascii2hex(bool insertSpace, bool isMaj)
+void ascii2hex(bool insertSpace, bool isMaj, size_t nbCharPerLine)
 {
-	//::MessageBoxA(NULL, "Hit", "", MB_OK);
 	SelectedString selText;
 	size_t textLen = selText.length();
 	if (!textLen) return;
 
-	size_t inc = insertSpace?3:2;
-	char *pDestText = new char[textLen*inc+1];
-
-	for (size_t i = 0, j = 0 ; i < textLen ; i++)
+	HWND hCurrScintilla = getCurrentScintillaHandle();
+	int eolMode = (int)::SendMessage(hCurrScintilla, SCI_GETEOLMODE, 0, 0);
+	size_t eolNbCharUnit = eolMode == SC_EOL_CRLF?2:1;
+	size_t eolNbChar = 0;
+	if (nbCharPerLine)
 	{
-		const char *format = "";
-		if (isMaj)
+		eolNbChar = (textLen / nbCharPerLine) * eolNbCharUnit;
+	}
+	size_t inc = insertSpace?3:2;
+	char *pDestText = new char[textLen*(inc+eolNbChar)+1];
+
+	size_t j = 0;
+	for (size_t i = 0, k = 1 ; i < textLen ; i++)
+	{
+		bool isEOL = false;
+		if (nbCharPerLine)
 		{
-			format = insertSpace?"%02X ":"%02X";
+			if (k >= nbCharPerLine)
+			{
+				isEOL = true;
+				k = 1;
+			}
+			else
+			{
+				k++;
+			}
+		}
+
+		const char *format = "";
+		if (!insertSpace || isEOL)
+		{
+			format = isMaj?"%02X":"%02x";
+			sprintf(pDestText + j, format, *(selText.getStr()+i));
+			j += 2;
 		}
 		else
 		{
-			format = insertSpace?"%02x ":"%02x";
+			format = isMaj?"%02X ":"%02x ";
+			sprintf(pDestText + j, format, *(selText.getStr()+i));
+			j += 3;
 		}
-		
-		sprintf(pDestText + j, format, *(selText.getStr()+i));
-		j += inc;
-	}
-	pDestText[textLen*inc] = 0x0;
 
-	HWND hCurrScintilla = getCurrentScintillaHandle();
+		if (isEOL)
+		{
+			if (eolMode == SC_EOL_CRLF)
+			{
+				pDestText[j++] = 0x0D;
+				pDestText[j++] = 0x0A;
+			}
+			else if (eolMode == SC_EOL_CR)
+			{
+				pDestText[j++] = 0x0D;
+			}
+			else if (eolMode == SC_EOL_LF)
+			{
+				pDestText[j++] = 0x0A;
+			}
+		}
+	}
+	pDestText[j] = 0x00;
+
 	size_t start = selText.getSelStartPos();
 	::SendMessage(hCurrScintilla, SCI_REPLACESEL, 0, (LPARAM)pDestText);
 	::SendMessage(hCurrScintilla, SCI_SETSEL, start, start+strlen(pDestText));
@@ -303,12 +342,18 @@ void hex2Ascii()
 	size_t textLen = transformer.length();
 	if (!textLen) return;
 
-	bool b = transformer.toAscii();
+	bool isOK = transformer.toAscii();
 
-	const char *hexStr = transformer.getStr();
-	HWND hCurrScintilla = getCurrentScintillaHandle();
-	size_t start = transformer.getSelStartPos();
-	::SendMessage(hCurrScintilla, SCI_REPLACESEL, 0, (LPARAM)hexStr);
-	::SendMessage(hCurrScintilla, SCI_SETSEL, start, start+strlen(hexStr));
-
+	if (isOK)
+	{
+		const char *hexStr = transformer.getStr();
+		HWND hCurrScintilla = getCurrentScintillaHandle();
+		size_t start = transformer.getSelStartPos();
+		::SendMessage(hCurrScintilla, SCI_REPLACESEL, 0, (LPARAM)hexStr);
+		::SendMessage(hCurrScintilla, SCI_SETSEL, start, start+strlen(hexStr));
+	}
+	else
+	{
+		::MessageBoxA(NULL, "Hex format is not conformed", "Converter plugin", MB_OK);
+	}
 }
