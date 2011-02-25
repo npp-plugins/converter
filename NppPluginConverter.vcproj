@@ -304,7 +304,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="shlwapi.lib"
-				OutputFile="C:\sources\Notepad++\trunk\PowerEditor\bin\plugins/NppConverter_Debug.dll"
+				OutputFile="C:\sources\Notepad++\trunk\PowerEditor\visual.net\Unicode Debug\plugins\NppConverter_Debug.dll"
 				LinkIncremental="2"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(OutDir)/NppConverter.pdb"

@@ -36,7 +36,7 @@ const TCHAR NPP_PLUGIN_NAME[] = TEXT("Converter");
 //
 // Here define the number of your plugin commands
 //
-const int nbFunc = 2;
+const int nbFunc = 5;
 
 
 //
@@ -70,6 +70,60 @@ bool setCommand(size_t index, TCHAR *cmdName, PFUNCPLUGINCMD pFunc, ShortcutKey 
 //
 // Your plugin command functions
 //
+
+#define VERSION_VALUE "1.0\0"
+#define VERSION_DIGITALVALUE 1, 0, 0, 0
+
+#ifdef UNICODE
+	#define NppMainEntry wWinMain
+	#define generic_strtol wcstol
+	#define generic_strncpy wcsncpy
+	#define generic_stricmp wcsicmp
+	#define generic_strncmp wcsncmp
+	#define generic_strnicmp wcsnicmp
+	#define generic_strncat wcsncat
+	#define generic_strchr wcschr
+	#define generic_atoi _wtoi
+	#define generic_itoa _itow
+	#define generic_atof _wtof
+	#define generic_strtok wcstok
+	#define generic_strftime wcsftime
+	#define generic_fprintf fwprintf
+	#define generic_sscanf swscanf
+	#define generic_fopen _wfopen
+	#define generic_fgets fgetws
+	#define generic_stat _wstat
+	#define generic_sprintf swprintf
+	#define COPYDATA_FILENAMES COPYDATA_FILENAMESW
+#else
+	#define NppMainEntry WinMain
+	#define generic_strtol strtol
+	#define generic_strncpy strncpy
+	#define generic_stricmp stricmp
+	#define generic_strncmp strncmp
+	#define generic_strnicmp strnicmp
+	#define generic_strncat strncat
+	#define generic_strchr strchr
+	#define generic_atoi atoi
+	#define generic_itoa itoa
+	#define generic_atof atof
+	#define generic_strtok strtok
+	#define generic_strftime strftime
+	#define generic_fprintf fprintf
+	#define generic_sscanf sscanf
+	#define generic_fopen fopen
+	#define generic_fgets fgets
+	#define generic_stat _stat
+	#define generic_sprintf sprintf
+	#define COPYDATA_FILENAMES COPYDATA_FILENAMESA
+#endif
+
+struct Param  {
+	bool _isMaj;
+	bool _insertSpace;
+	size_t _nbCharPerLine;
+	Param():_isMaj(true),_insertSpace(false), _nbCharPerLine(0) {};
+};
 
 class SelectedString {
 public:
@@ -108,9 +162,13 @@ public:
 	bool toAscii();
 };
 
+void getCmdsFromConf(const TCHAR *confPath, Param & param);
+void loadConfFile();
 void ascii2hex(bool insertSpace, bool isMaj, size_t nbCharPerLine);
 void ascii2Hex();
 int getTrueHexValue(char c);
 void hex2Ascii();
+void editConf();
+void about();
 
 #endif //PLUGINDEFINITION_H

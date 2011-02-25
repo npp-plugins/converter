@@ -18,6 +18,8 @@
 #include "PluginDefinition.h"
 #include "menuCmdID.h"
 #include <stdio.h>
+#include <Shlwapi.h>
+#include <string>
 
 //
 // The plugin data that Notepad++ needs
@@ -28,6 +30,11 @@ FuncItem funcItem[nbFunc];
 // The data of Notepad++ that you can use in your plugin commands
 //
 NppData nppData;
+
+
+Param param;
+typedef std::basic_string<TCHAR> generic_string;
+generic_string confPath;
 
 //
 // Initialize your plugin data here
@@ -61,6 +68,9 @@ void commandMenuInit()
     //            );
     setCommand(0, TEXT("ASCII -> HEX"), ascii2Hex, NULL, false);
     setCommand(1, TEXT("HEX -> ASCII"), hex2Ascii, NULL, false);
+	setCommand(2, TEXT("---"), NULL, NULL, false);
+	setCommand(3, TEXT("Edit Configuration File"), editConf, NULL, false);
+	setCommand(4, TEXT("About"), about, NULL, false);
 }
 
 //
@@ -101,10 +111,72 @@ HWND getCurrentScintillaHandle() {
 	return (currentEdit == 0)?nppData._scintillaMainHandle:nppData._scintillaSecondHandle;
 };
 
+const TCHAR *pluginConfName = TEXT("converter.ini");
+const TCHAR *ascii2HexSectionName = TEXT("ascii2Hex");
+const TCHAR *ascii2HexSpace = TEXT("insertSpace");
+const TCHAR *ascii2HexMaj = TEXT("uppercase");
+const TCHAR *ascii2HexNbCharPerLine = TEXT("nbCharPerLine");
+
+void getCmdsFromConf(const TCHAR *confPath, Param & param)
+{
+	TCHAR cmdNames[MAX_PATH];
+	::GetPrivateProfileSectionNames(cmdNames, MAX_PATH, confPath);
+	TCHAR *pFn = cmdNames;
+
+	int i = 0;
+	if (*pFn && wcscmp(pFn, ascii2HexSectionName) == 0)
+	{
+		int val = GetPrivateProfileInt(pFn, ascii2HexSpace, 0, confPath);
+		param._insertSpace = val != 0;
+		val = GetPrivateProfileInt(pFn, ascii2HexMaj, 0, confPath);
+		param._isMaj = val != 0;
+		val = GetPrivateProfileInt(pFn, ascii2HexNbCharPerLine, 0, confPath);
+		param._nbCharPerLine = val;
+	}
+}
+// 
+// if conf file does not exist, then create it and load it.
+void loadConfFile()
+{
+	TCHAR confDir[MAX_PATH];
+	::SendMessage(nppData._nppHandle, NPPM_GETPLUGINSCONFIGDIR, MAX_PATH, (LPARAM)confDir);
+	confPath = confDir;
+	confPath += TEXT("\\");
+	confPath += pluginConfName;
+	
+	const char confContent[] = "\
+; This section contains the paremters for command ASCII -> Hex\n\
+; * insertSpace: this parameter allows you to insert a white space between the generated hex codes. Set the value to 1 to enable it, 0 otherwise.\n\
+; * uppercase: this parameter allows you to make a-f in UPPERCASE (ie. A-F). Set the value to 1 to enable it , 0 otherwise.\n\
+; * nbCharPerLine:this parameter allows you to break line. The value you set is the number of ascii character per line. Set the value from 0 to whatever you want.\n\
+[ascii2Hex]\n\
+insertSpace=0\n\
+uppercase=1\n\
+nbCharPerLine=16\n\
+\n\
+\n";
+
+	if (!::PathFileExists(confPath.c_str()))
+	{
+		FILE *f = generic_fopen(confPath.c_str(), TEXT("w"));
+		if (f)
+		{
+			fwrite(confContent, sizeof(confContent[0]), strlen(confContent), f);
+			fflush(f);
+			fclose(f);
+		}
+		else
+		{
+			generic_string msg = confPath;
+			msg += TEXT(" is absent, and this file cannot be create.");
+			::MessageBox(nppData._nppHandle, msg.c_str(), TEXT("Not present"), MB_OK);
+		}
+	}
+	getCmdsFromConf(confPath.c_str(), param);
+}
 void ascii2Hex()
 {
-    ascii2hex(true, false, 8);
-	//ascii2hex(false, true);
+	ascii2hex(param._insertSpace, param._isMaj, param._nbCharPerLine);
 }
 
 
@@ -356,4 +428,25 @@ void hex2Ascii()
 	{
 		::MessageBoxA(NULL, "Hex format is not conformed", "Converter plugin", MB_OK);
 	}
+}
+
+void about()
+{
+	generic_string aboutMsg = TEXT("Version: ");
+	aboutMsg += TEXT(VERSION_VALUE);
+	aboutMsg += TEXT("\r\r");
+	aboutMsg += TEXT("License: GPL\r\r");
+	aboutMsg += TEXT("Author: Don Ho <don.h@free.fr>\r");
+	::MessageBox(nppData._nppHandle, aboutMsg.c_str(), TEXT("Converter Plugin"), MB_OK);
+}
+
+void editConf()
+{
+	if (!::PathFileExists(confPath.c_str()))
+	{
+		generic_string msg = confPath + TEXT("is not present.\\rPlease create this file manually.");
+		::MessageBox(nppData._nppHandle, msg.c_str(), TEXT("Configuration file is absent"), MB_OK);
+		return;
+	}
+	::SendMessage(nppData._nppHandle, NPPM_DOOPEN, 0, (LPARAM)confPath.c_str());
 }
