@@ -146,6 +146,7 @@ void loadConfFile()
 	
 	const char confContent[] = "\
 ; This section contains the paremters for command ASCII -> Hex\n\
+; If you modify directly this file, please restart your Notepad++ to take effect.\n\
 ; * insertSpace: this parameter allows you to insert a white space between the generated hex codes. Set the value to 1 to enable it, 0 otherwise.\n\
 ; * uppercase: this parameter allows you to make a-f in UPPERCASE (ie. A-F). Set the value to 1 to enable it , 0 otherwise.\n\
 ; * nbCharPerLine:this parameter allows you to break line. The value you set is the number of ascii character per line. Set the value from 0 to whatever you want.\n\
@@ -153,7 +154,6 @@ void loadConfFile()
 insertSpace=0\n\
 uppercase=1\n\
 nbCharPerLine=16\n\
-\n\
 \n";
 
 	if (!::PathFileExists(confPath.c_str()))
