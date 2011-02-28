@@ -71,8 +71,8 @@ bool setCommand(size_t index, TCHAR *cmdName, PFUNCPLUGINCMD pFunc, ShortcutKey 
 // Your plugin command functions
 //
 
-#define VERSION_VALUE "1.0\0"
-#define VERSION_DIGITALVALUE 1, 0, 0, 0
+#define VERSION_VALUE "2.0\0"
+#define VERSION_DIGITALVALUE 2, 0, 0, 0
 
 #ifdef UNICODE
 	#define NppMainEntry wWinMain
@@ -139,7 +139,7 @@ public:
 
 	size_t length(){
 		if (_str)
-			return strlen(_str);
+			return (_selEndPos-_selStartPos);
 		return 0;
 	};
 

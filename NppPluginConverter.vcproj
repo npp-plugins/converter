@@ -377,10 +377,6 @@
 				>
 			</File>
 			<File
-				RelativePath="DockingFeature\resource.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Scintilla.h"
 				>
 			</File>

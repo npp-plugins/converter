@@ -330,7 +330,7 @@ bool HexString::toAscii()
 	}
 	// finalize
 	if (stat == st_c) return false;
-	_str[j] = '\0';
+	_selEndPos = _selStartPos + j; 
 	return true;
 }
 
@@ -402,8 +402,9 @@ void ascii2hex(bool insertSpace, bool isMaj, size_t nbCharPerLine)
 	pDestText[j] = 0x00;
 
 	size_t start = selText.getSelStartPos();
-	::SendMessage(hCurrScintilla, SCI_REPLACESEL, 0, (LPARAM)pDestText);
-	::SendMessage(hCurrScintilla, SCI_SETSEL, start, start+strlen(pDestText));
+	::SendMessage(hCurrScintilla, SCI_REPLACESEL, 0, (LPARAM)"");
+	::SendMessage(hCurrScintilla, SCI_ADDTEXT, j, (LPARAM)pDestText);
+	::SendMessage(hCurrScintilla, SCI_SETSEL, start, start+j);
 
 	delete [] pDestText;
 }
@@ -421,8 +422,10 @@ void hex2Ascii()
 		const char *hexStr = transformer.getStr();
 		HWND hCurrScintilla = getCurrentScintillaHandle();
 		size_t start = transformer.getSelStartPos();
-		::SendMessage(hCurrScintilla, SCI_REPLACESEL, 0, (LPARAM)hexStr);
-		::SendMessage(hCurrScintilla, SCI_SETSEL, start, start+strlen(hexStr));
+		size_t len = transformer.length();
+		::SendMessage(hCurrScintilla, SCI_REPLACESEL, 0, (LPARAM)"");
+		::SendMessage(hCurrScintilla, SCI_ADDTEXT, len, (LPARAM)hexStr);
+		::SendMessage(hCurrScintilla, SCI_SETSEL, start, start+len);
 	}
 	else
 	{
