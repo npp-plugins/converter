@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include <Shlwapi.h>
 #include <string>
+#include "conversionPanel.h"
 
 //
 // The plugin data that Notepad++ needs
@@ -35,12 +36,14 @@ NppData nppData;
 Param param;
 typedef std::basic_string<TCHAR> generic_string;
 generic_string confPath;
+ConversionPanel _goToLine;
 
 //
 // Initialize your plugin data here
 // It will be called while plugin loading   
 void pluginInit(HANDLE hModule)
 {
+	_goToLine.init((HINSTANCE)hModule, NULL);
 }
 
 //
@@ -69,8 +72,10 @@ void commandMenuInit()
     setCommand(0, TEXT("ASCII -> HEX"), ascii2Hex, NULL, false);
     setCommand(1, TEXT("HEX -> ASCII"), hex2Ascii, NULL, false);
 	setCommand(2, TEXT("---"), NULL, NULL, false);
-	setCommand(3, TEXT("Edit Configuration File"), editConf, NULL, false);
-	setCommand(4, TEXT("About"), about, NULL, false);
+	setCommand(CONVERSIONPANEL_INDEX, TEXT("Conversion Panel"), conversionPanel, NULL, false);
+	setCommand(4, TEXT("---"), NULL, NULL, false);
+	setCommand(5, TEXT("Edit Configuration File"), editConf, NULL, false);
+	setCommand(6, TEXT("About"), about, NULL, false);
 }
 
 //
@@ -109,7 +114,7 @@ HWND getCurrentScintillaHandle() {
     int currentEdit;
     ::SendMessage(nppData._nppHandle, NPPM_GETCURRENTSCINTILLA, 0, (LPARAM)&currentEdit);
 	return (currentEdit == 0)?nppData._scintillaMainHandle:nppData._scintillaSecondHandle;
-};
+}
 
 const TCHAR *pluginConfName = TEXT("converter.ini");
 const TCHAR *ascii2HexSectionName = TEXT("ascii2Hex");
@@ -433,6 +438,7 @@ void hex2Ascii()
 	}
 }
 
+
 void about()
 {
 	generic_string aboutMsg = TEXT("Version: ");
@@ -452,4 +458,27 @@ void editConf()
 		return;
 	}
 	::SendMessage(nppData._nppHandle, NPPM_DOOPEN, 0, (LPARAM)confPath.c_str());
+}
+
+void conversionPanel()
+{
+	_goToLine.setParent(nppData._nppHandle);
+	tTbData	data = {0};
+
+	int dec = strtoul("111", NULL, 2);
+	if (!_goToLine.isCreated())
+	{
+		_goToLine.create(&data);
+
+		// define the default docking behaviour
+		data.uMask = DWS_DF_CONT_BOTTOM;
+
+		data.pszModuleName = _goToLine.getPluginFileName();
+
+		// the dlgDlg should be the index of funcItem where the current function pointer is
+		// in this case is DOCKABLE_DEMO_INDEX
+		data.dlgID = CONVERSIONPANEL_INDEX;
+		::SendMessage(nppData._nppHandle, NPPM_DMMREGASDCKDLG, 0, (LPARAM)&data);
+	}
+	_goToLine.display();
 }
