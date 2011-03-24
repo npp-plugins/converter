@@ -36,14 +36,14 @@ NppData nppData;
 Param param;
 typedef std::basic_string<TCHAR> generic_string;
 generic_string confPath;
-ConversionPanel _goToLine;
+ConversionPanel _conversionPanel;
 
 //
 // Initialize your plugin data here
 // It will be called while plugin loading   
 void pluginInit(HANDLE hModule)
 {
-	_goToLine.init((HINSTANCE)hModule, NULL);
+	_conversionPanel.init((HINSTANCE)hModule, NULL);
 }
 
 //
@@ -463,23 +463,23 @@ void editConf()
 
 void conversionPanel()
 {
-	_goToLine.setParent(nppData._nppHandle);
+	_conversionPanel.setParent(nppData._nppHandle);
 	tTbData	data = {0};
 
 	int dec = strtoul("111", NULL, 2);
-	if (!_goToLine.isCreated())
+	if (!_conversionPanel.isCreated())
 	{
-		_goToLine.create(&data);
+		_conversionPanel.create(&data);
 
 		// define the default docking behaviour
-		data.uMask = DWS_DF_CONT_BOTTOM;
+		data.uMask = DWS_DF_FLOATING;
 
-		data.pszModuleName = _goToLine.getPluginFileName();
+		data.pszModuleName = _conversionPanel.getPluginFileName();
 
 		// the dlgDlg should be the index of funcItem where the current function pointer is
 		// in this case is DOCKABLE_DEMO_INDEX
 		data.dlgID = CONVERSIONPANEL_INDEX;
 		::SendMessage(nppData._nppHandle, NPPM_DMMREGASDCKDLG, 0, (LPARAM)&data);
 	}
-	_goToLine.display();
+	_conversionPanel.display();
 }
