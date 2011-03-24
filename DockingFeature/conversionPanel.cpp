@@ -87,7 +87,7 @@ BOOL CALLBACK ConversionPanel::run_dlgProc(UINT message, WPARAM wParam, LPARAM l
 				}
 				case ID_ASCII_BUTTON :
 				{
-					//copyToClipboardFrom(ID_HEX_EDIT);
+					copyToClipboardFrom(ID_ASCII_EDIT);
 					return TRUE;
 				}
 				case ID_DEC_BUTTON :
@@ -412,17 +412,29 @@ void ConversionPanel::insertToNppFrom(int id)
 
 void ConversionPanel::copyToClipboardFrom(int id)
 {
-	const int inStrSize = 256;
-	char intStr[inStrSize];
-	::SendDlgItemMessageA(_hSelf, id, WM_GETTEXT, inStrSize, (LPARAM)intStr);
-	
+	const int intStrMaxSize = 256;
+	char intStr[intStrMaxSize];
+	size_t intStrLen = 0;
+	if (id == ID_ASCII_EDIT)
+	{
+		int v = getAsciiUcharFromDec();
+		if (v == -1) return;
+		intStr[0] = v;
+		intStr[1] = '\0';
+		intStrLen = 1;
+	}
+	else
+	{
+		::SendDlgItemMessageA(_hSelf, id, WM_GETTEXT, intStrMaxSize, (LPARAM)intStr);
+		intStrLen = strlen(intStr);
+	}
 	// Open the clipboard, and empty it. 
 	if (!OpenClipboard(NULL)) 
 		return;
 	EmptyClipboard();
  
 	// Allocate a global memory object for the text. 
-	HGLOBAL hglbCopy = GlobalAlloc(GMEM_MOVEABLE, (inStrSize + 1) * sizeof(unsigned char)); 
+	HGLOBAL hglbCopy = GlobalAlloc(GMEM_MOVEABLE, (intStrLen + 1) * sizeof(unsigned char)); 
 	if (hglbCopy == NULL) 
 	{ 
 		CloseClipboard(); 
@@ -431,8 +443,8 @@ void ConversionPanel::copyToClipboardFrom(int id)
 
 	// Lock the handle and copy the text to the buffer. 
 	unsigned char *lpucharCopy = (unsigned char *)GlobalLock(hglbCopy); 
-	memcpy(lpucharCopy, intStr, inStrSize * sizeof(unsigned char)); 
-	lpucharCopy[inStrSize] = 0;    // null character
+	memcpy(lpucharCopy, intStr, intStrLen * sizeof(unsigned char)); 
+	lpucharCopy[intStrLen] = 0;    // null character
 	
 	GlobalUnlock(hglbCopy); 
 
@@ -450,7 +462,7 @@ void ConversionPanel::copyToClipboardFrom(int id)
 
 	// Lock the handle and copy the text to the buffer. 
 	unsigned long *lpLenCopy = (unsigned long *)GlobalLock(hglbLenCopy); 
-	*lpLenCopy = inStrSize;
+	*lpLenCopy = intStrLen;
 	
 	GlobalUnlock(hglbLenCopy); 
 

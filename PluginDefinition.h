@@ -71,9 +71,6 @@ bool setCommand(size_t index, TCHAR *cmdName, PFUNCPLUGINCMD pFunc, ShortcutKey 
 // Your plugin command functions
 //
 
-#define VERSION_VALUE "2.0\0"
-#define VERSION_DIGITALVALUE 2, 0, 0, 0
-
 #ifdef UNICODE
 	#define NppMainEntry wWinMain
 	#define generic_strtol wcstol

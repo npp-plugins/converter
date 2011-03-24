@@ -179,6 +179,7 @@ nbCharPerLine=16\n\
 	}
 	getCmdsFromConf(confPath.c_str(), param);
 }
+
 void ascii2Hex()
 {
 	ascii2hex(param._insertSpace, param._isMaj, param._nbCharPerLine);
@@ -258,7 +259,7 @@ int getTrueHexValue(char c)
 // 0. only 0-9 a-f A-F withe space (32) and return (10, 13) are allowed.
 // 1. 2 char to form 1 byte, so there are alway 2 char w/o space.
 // 2. if there is a space between the 1st char and the 2nd char, then it should be it in all string, and vice and versa 
-// 3. All the wite space (32) \n(10) and \r(13) will be ignored.
+// 3. All the white space (32) \n(10) and \r(13) will be ignored.
 // 
 bool HexString::toAscii()
 {
