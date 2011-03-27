@@ -294,17 +294,17 @@ void ConversionPanel::setValueExcept(int exceptID, size_t value)
 		if (value <= 255)
 		{
 			TCHAR ascii2Display[2];
-			ascii2Display[0] = value;
+			ascii2Display[0] = (TCHAR)value;
 			ascii2Display[1] = '\0';
 			::SendDlgItemMessage(_hSelf, ID_ASCII_EDIT, WM_SETTEXT, 0, (LPARAM)ascii2Display);
-			::SendDlgItemMessage(_hSelf, ID_ASCII_INFO_STATIC, WM_SETTEXT, 0, (LPARAM)getAsciiInfo(value).c_str());
+			::SendDlgItemMessage(_hSelf, ID_ASCII_INFO_STATIC, WM_SETTEXT, 0, (LPARAM)getAsciiInfo((unsigned char)value).c_str());
 		}
 		else
 			::SendDlgItemMessage(_hSelf, ID_ASCII_INFO_STATIC, WM_SETTEXT, 0, (LPARAM)TEXT(""));
 	}
 	else
 	{
-		::SendDlgItemMessage(_hSelf, ID_ASCII_INFO_STATIC, WM_SETTEXT, 0, (LPARAM)getAsciiInfo(value).c_str());
+		::SendDlgItemMessage(_hSelf, ID_ASCII_INFO_STATIC, WM_SETTEXT, 0, (LPARAM)getAsciiInfo((unsigned char)value).c_str());
 	}
 
 	if (exceptID != ID_DEC_EDIT)
@@ -325,7 +325,7 @@ void ConversionPanel::setValueExcept(int exceptID, size_t value)
 	if (exceptID != ID_BIN_EDIT)
 	{
 		char str2DisplayA[1234];
-		itoa(value, str2DisplayA, 2);
+		itoa(int(value), str2DisplayA, 2);
 		::SendDlgItemMessageA(_hSelf, ID_BIN_EDIT, WM_SETTEXT, 0, (LPARAM)str2DisplayA);
 	}
 }
@@ -462,7 +462,7 @@ void ConversionPanel::copyToClipboardFrom(int id)
 
 	// Lock the handle and copy the text to the buffer. 
 	unsigned long *lpLenCopy = (unsigned long *)GlobalLock(hglbLenCopy); 
-	*lpLenCopy = intStrLen;
+	*lpLenCopy = (unsigned long)intStrLen;
 	
 	GlobalUnlock(hglbLenCopy); 
 

@@ -170,12 +170,14 @@ nbCharPerLine=16\n\
 			fflush(f);
 			fclose(f);
 		}
+		/*
 		else
 		{
 			generic_string msg = confPath;
 			msg += TEXT(" is absent, and this file cannot be create.");
 			::MessageBox(nppData._nppHandle, msg.c_str(), TEXT("Not present"), MB_OK);
 		}
+		*/
 	}
 	getCmdsFromConf(confPath.c_str(), param);
 }
@@ -454,7 +456,7 @@ void editConf()
 {
 	if (!::PathFileExists(confPath.c_str()))
 	{
-		generic_string msg = confPath + TEXT("is not present.\\rPlease create this file manually.");
+		generic_string msg = confPath + TEXT(" is not present.\rPlease create this file manually.");
 		::MessageBox(nppData._nppHandle, msg.c_str(), TEXT("Configuration file is absent"), MB_OK);
 		return;
 	}
