@@ -380,7 +380,8 @@ void ascii2hex(bool insertSpace, bool isMaj, size_t nbCharPerLine)
 		if (!insertSpace || isEOL)
 		{
 			format = isMaj?"%02X":"%02x";
-			sprintf(pDestText + j, format, *(selText.getStr()+i));
+			unsigned char val = selText.getChar(i);
+			sprintf(pDestText + j, format, val);
 			j += 2;
 		}
 		else

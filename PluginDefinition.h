@@ -148,6 +148,11 @@ public:
 		return _selEndPos;
 	};
 
+	char getChar(int i) {
+        return _str[i];
+    };
+
+
 protected:
 	char *_str;
 	size_t _selStartPos;
