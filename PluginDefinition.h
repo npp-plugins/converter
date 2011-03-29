@@ -148,7 +148,9 @@ public:
 		return _selEndPos;
 	};
 
-	char getChar(int i) {
+	int getChar(size_t i) {
+		if (i >= (_selEndPos-_selStartPos))
+			return -1;
         return _str[i];
     };
 

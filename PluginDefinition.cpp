@@ -377,17 +377,23 @@ void ascii2hex(bool insertSpace, bool isMaj, size_t nbCharPerLine)
 		}
 
 		const char *format = "";
+		int val = selText.getChar(i);
+		if (val == -1)
+		{
+			delete [] pDestText;
+			return;
+		}
+
 		if (!insertSpace || isEOL)
 		{
 			format = isMaj?"%02X":"%02x";
-			unsigned char val = selText.getChar(i);
-			sprintf(pDestText + j, format, val);
+			sprintf(pDestText + j, format, (unsigned char)val);
 			j += 2;
 		}
 		else
 		{
 			format = isMaj?"%02X ":"%02x ";
-			sprintf(pDestText + j, format, *(selText.getStr()+i));
+			sprintf(pDestText + j, format, (unsigned char)val);
 			j += 3;
 		}
 
