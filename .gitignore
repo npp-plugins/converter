@@ -1,0 +1,10 @@
+UpgradeLog.htm
+*.sdf
+*.suo
+*.filters
+vc.proj/x64/
+vc.proj/Debug/
+vc.proj/Release/
+*.opensdf
+*.sln
+vc.proj/NppPluginConverter.vcxproj.user
