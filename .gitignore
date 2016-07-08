@@ -12,3 +12,5 @@ vc.proj/NppPluginConverter.lib
 *.filters
 *.opensdf
 *.sln
+*.exp
+vc.proj/NppConverter.lib
