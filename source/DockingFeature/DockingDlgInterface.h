@@ -72,14 +72,13 @@ public:
 	};
 
 protected :
-	virtual BOOL CALLBACK run_dlgProc(UINT message, WPARAM , LPARAM lParam)
+	virtual INT_PTR CALLBACK run_dlgProc(UINT message, WPARAM , LPARAM lParam)
 	{
 		switch (message) 
 		{
-
 			case WM_NOTIFY: 
 			{
-				LPNMHDR	pnmh	= (LPNMHDR)lParam;
+				LPNMHDR	pnmh = (LPNMHDR)lParam;
 
 				if (pnmh->hwndFrom == _hParent)
 				{

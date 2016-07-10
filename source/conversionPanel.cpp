@@ -35,7 +35,7 @@ extern NppData nppData;
 #define TXT_COLOR    (RGB(255,255,255))
 #define CF_NPPTEXTLEN	TEXT("Notepad++ Binary Text Length")
 
-BOOL CALLBACK ConversionPanel::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
+INT_PTR CALLBACK ConversionPanel::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message) 
 	{
