@@ -309,17 +309,17 @@ void ConversionPanel::setValueExcept(int exceptID, size_t value)
 
 	if (exceptID != ID_DEC_EDIT)
 	{
-		generic_sprintf(str2Display, strLen, TEXT("%d"), (size_t)value);
+		generic_sprintf(str2Display, strLen, TEXT("%zd"), (size_t)value);
 		::SendDlgItemMessage(_hSelf, ID_DEC_EDIT, WM_SETTEXT, 0, (LPARAM)str2Display);
 	}
 	if (exceptID != ID_HEX_EDIT)
 	{
-		generic_sprintf(str2Display, strLen, TEXT("%X"), (size_t)value);
+		generic_sprintf(str2Display, strLen, TEXT("%zX"), (size_t)value);
 		::SendDlgItemMessage(_hSelf, ID_HEX_EDIT, WM_SETTEXT, 0, (LPARAM)str2Display);
 	}
 	if (exceptID != ID_OCT_EDIT)
 	{
-		generic_sprintf(str2Display, strLen, TEXT("%o"), (size_t)value);
+		generic_sprintf(str2Display, strLen, TEXT("%zo"), (size_t)value);
 		::SendDlgItemMessage(_hSelf, ID_OCT_EDIT, WM_SETTEXT, 0, (LPARAM)str2Display);
 	}
 	if (exceptID != ID_BIN_EDIT)
