@@ -122,20 +122,20 @@ const TCHAR *ascii2HexSpace = TEXT("insertSpace");
 const TCHAR *ascii2HexMaj = TEXT("uppercase");
 const TCHAR *ascii2HexNbCharPerLine = TEXT("nbCharPerLine");
 
-void getCmdsFromConf(const TCHAR *confPath, Param & param)
+void getCmdsFromConf(const TCHAR *confPathVal, Param & paramVal)
 {
 	TCHAR cmdNames[MAX_PATH];
-	::GetPrivateProfileSectionNames(cmdNames, MAX_PATH, confPath);
+	::GetPrivateProfileSectionNames(cmdNames, MAX_PATH, confPathVal);
 	TCHAR *pFn = cmdNames;
 
 	if (*pFn && wcscmp(pFn, ascii2HexSectionName) == 0)
 	{
-		int val = GetPrivateProfileInt(pFn, ascii2HexSpace, 0, confPath);
-		param._insertSpace = val != 0;
-		val = GetPrivateProfileInt(pFn, ascii2HexMaj, 0, confPath);
-		param._isMaj = val != 0;
-		val = GetPrivateProfileInt(pFn, ascii2HexNbCharPerLine, 0, confPath);
-		param._nbCharPerLine = val;
+		int val = GetPrivateProfileInt(pFn, ascii2HexSpace, 0, confPathVal);
+		paramVal._insertSpace = val != 0;
+		val = GetPrivateProfileInt(pFn, ascii2HexMaj, 0, confPathVal);
+		paramVal._isMaj = val != 0;
+		val = GetPrivateProfileInt(pFn, ascii2HexNbCharPerLine, 0, confPathVal);
+		paramVal._nbCharPerLine = val;
 	}
 }
 // 
