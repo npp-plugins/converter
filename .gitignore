@@ -16,4 +16,5 @@ vs.proj/NppPluginConverter.lib
 *.opensdf
 *.sln
 *.exp
+*.aps
 vs.proj/NppConverter.lib
