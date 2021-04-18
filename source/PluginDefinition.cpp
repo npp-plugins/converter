@@ -206,7 +206,12 @@ SelectedString::SelectedString(): _str(NULL), _selStartPos(0), _selEndPos(0)
     if (textLen == 0) return;
 
     _str = new char[textLen+1];
-    ::SendMessage(hCurrScintilla, SCI_GETSELTEXT, 0, (LPARAM)_str);
+
+	Sci_TextRange tr;
+	tr.chrg.cpMin = static_cast<long>(start);
+	tr.chrg.cpMax = static_cast<long>(end);
+	tr.lpstrText = _str;
+	::SendMessage(hCurrScintilla, SCI_GETTEXTRANGE, 0, reinterpret_cast<LPARAM>(&tr));
 }	
 
 enum hexStat{st_init, st_c, st_cc};
