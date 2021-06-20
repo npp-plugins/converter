@@ -75,7 +75,7 @@ void commandMenuInit()
 	setCommand(CONVERSIONPANEL_INDEX, TEXT("Conversion Panel"), conversionPanel, NULL, false);
 	setCommand(4, TEXT("---"), NULL, NULL, false);
 	setCommand(5, TEXT("Edit Configuration File"), editConf, NULL, false);
-	setCommand(6, TEXT("About"), about, NULL, false);
+	setCommand(6, TEXT("About..."), about, NULL, false);
 }
 
 //
