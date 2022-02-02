@@ -17,4 +17,5 @@ vs.proj/NppPluginConverter.lib
 *.sln
 *.exp
 *.aps
+*.bak
 vs.proj/NppConverter.lib
