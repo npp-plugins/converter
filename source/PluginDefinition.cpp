@@ -1,5 +1,5 @@
 // This file is part of Notepad++ project
-// Copyright (C)2021 Don HO <don.h@free.fr>
+// Copyright (C)2022 Don HO <don.h@free.fr>
 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -207,11 +207,11 @@ SelectedString::SelectedString(): _str(NULL), _selStartPos(0), _selEndPos(0)
 
     _str = new char[textLen+1];
 
-	Sci_TextRange tr;
+	Sci_TextRangeFull tr;
 	tr.chrg.cpMin = static_cast<long>(start);
 	tr.chrg.cpMax = static_cast<long>(end);
 	tr.lpstrText = _str;
-	::SendMessage(hCurrScintilla, SCI_GETTEXTRANGE, 0, reinterpret_cast<LPARAM>(&tr));
+	::SendMessage(hCurrScintilla, SCI_GETTEXTRANGEFULL, 0, reinterpret_cast<LPARAM>(&tr));
 }	
 
 enum hexStat{st_init, st_c, st_cc};

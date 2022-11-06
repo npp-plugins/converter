@@ -1,5 +1,5 @@
 // This file is part of Notepad++ project
-// Copyright (C)2021 Don HO <don.h@free.fr>
+// Copyright (C)2022 Don HO <don.h@free.fr>
 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,8 +18,8 @@
 #ifndef RESOURCE_H
 #define RESOURCE_H
 
-#define VERSION_VALUE "4.4\0"
-#define VERSION_DIGITALVALUE 4, 4, 0, 0
+#define VERSION_VALUE "4.5\0"
+#define VERSION_DIGITALVALUE 4, 5, 0, 0
 
 #ifndef IDC_STATIC
 #define IDC_STATIC	-1
