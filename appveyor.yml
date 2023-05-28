@@ -1,10 +1,10 @@
-version: 4.3 {build}
-image: Visual Studio 2017
+version: 4.5.{build}
+image: Visual Studio 2022
 
 
 environment:
   matrix:
-  - PlatformToolset: v141
+  - PlatformToolset: v143
 
 platform:
     - x64
@@ -25,39 +25,25 @@ install:
     - if "%platform%"=="arm64" set archi=amd64_arm64
     - if "%platform%"=="arm64" set platform_input=arm64
 
-    - if "%PlatformToolset%"=="v141" call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" %archi%
-    - if "%PlatformToolset%"=="v142" call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat" %archi%
+    - if "%PlatformToolset%"=="v143" call "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat" %archi%
 
 build_script:
-    - cd "%APPVEYOR_BUILD_FOLDER%"\vs.proj
+    - cd "%APPVEYOR_BUILD_FOLDER%"/vs.proj
     - msbuild NppPluginConverter.vcxproj /m /p:configuration="%configuration%" /p:platform="%platform_input%" /p:PlatformToolset="%PlatformToolset%" /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
 
 after_build:
     - cd "%APPVEYOR_BUILD_FOLDER%"
     - ps: >-
-        $NppPluginConverterFileName = "NppConverter.$env:PLATFORM_INPUT.$env:CONFIGURATION.$env:PLATFORMTOOLSET.dll"
 
         if ($env:PLATFORM_INPUT -eq "x64" -and $env:CONFIGURATION -eq "Release") {
-            Push-AppveyorArtifact "bin64\NppConverter.dll" -FileName "$NppPluginConverterFileName"
-        }
-
-        if ($env:PLATFORM_INPUT -eq "x64" -and $env:CONFIGURATION -eq "Debug") {
-            Push-AppveyorArtifact "vs.proj\x64\Debug\NppConverter.dll" -FileName "$NppPluginConverterFileName"
+            Push-AppveyorArtifact "bin64\NppConverter.dll" -FileName NppConverter.dll
         }
 
         if ($env:PLATFORM_INPUT -eq "Win32" -and $env:CONFIGURATION -eq "Release") {
-            Push-AppveyorArtifact "bin\NppConverter.dll" -FileName "$NppPluginConverterFileName"
-        }
-
-        if ($env:PLATFORM_INPUT -eq "Win32" -and $env:CONFIGURATION -eq "Debug") {
-            Push-AppveyorArtifact "vs.proj\Debug\NppConverter.dll" -FileName "$NppPluginConverterFileName"
+            Push-AppveyorArtifact "bin\NppConverter.dll" -FileName NppConverter.dll
         }
 
         if ($env:PLATFORM_INPUT -eq "arm64" -and $env:CONFIGURATION -eq "Release") {
-            Push-AppveyorArtifact "arm64\NppConverter.dll" -FileName "$NppPluginConverterFileName"
-        }
-
-        if ($env:PLATFORM_INPUT -eq "arm64" -and $env:CONFIGURATION -eq "Debug") {
-            Push-AppveyorArtifact "vs.proj\ARM64\Debug\NppConverter.dll" -FileName "$NppPluginConverterFileName"
+            Push-AppveyorArtifact "arm64\NppConverter.dll" -FileName NppConverter.dll
         }
 
