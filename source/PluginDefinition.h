@@ -151,7 +151,7 @@ public:
 	int getChar(size_t i) {
 		if (i >= (_selEndPos-_selStartPos))
 			return -1;
-        return _str[i];
+        return _str[i] & 0xFF;
     };
 
 
