@@ -1,10 +1,11 @@
-NppConvert is a ASCII<->Hex converter plugin for Notepad++.
+NppConvert is a plugin for Notepad++ that allows you to convert selected text between ASCII and hexadecimal formats. You can choose to convert a hexadecimal string to ASCII or an ASCII string to hexadecimal, depending on your needs.
 
-It converts selected text (hexadecimal string or ASCII string) to ASCII or hexadecimal string according your choice.
-The format of generated hex string can be set by modifying the parameters in the section [ascii2Hex] of converter.ini (it's necessary to restart Notepad++). 
-For the "Hex -> ASCII" command's input hex string format, NppConverter is smart enough to detect it.
-This plugin provide also a conversion panel. It could be useful when you need convert a value into ASCII, decimal, hexadecimal, octal and binary.
+To customize the format of the generated hex string, you can modify the parameters in the [ascii2Hex] section of the converter.ini file. Note that you need to restart Notepad++ for the changes to take effect.
 
-This plugin is under GPL.
+NppConvert is also capable of detecting the input hex string format for the “Hex -> ASCII” command, making it easier to use.
+
+In addition to conversion, this plugin provides a conversion panel that can be useful when you need to convert a value into ASCII, decimal, hexadecimal, octal, or binary.
+
+This plugin is licensed under GPL.
 
 Don Ho <don.h@free.fr>
