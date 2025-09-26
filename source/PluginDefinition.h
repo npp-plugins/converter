@@ -148,9 +148,13 @@ public:
 		return _selEndPos;
 	};
 
-	int getChar(size_t i) {
-		if (i >= (_selEndPos-_selStartPos))
-			return -1;
+	size_t getChar(size_t i, bool& isBufferOverflowed) {
+		isBufferOverflowed = false;
+		if (i >= (_selEndPos - _selStartPos))
+		{
+			isBufferOverflowed = true;
+			return 0;
+		}
         return _str[i];
     };
 
