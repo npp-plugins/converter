@@ -386,8 +386,9 @@ void ascii2hex(bool insertSpace, bool isMaj, size_t nbCharPerLine)
 		}
 
 		const char *format = "";
-		int val = selText.getChar(i);
-		if (val == -1)
+		bool isBufferOverflowed = false;
+		size_t val = selText.getChar(i, isBufferOverflowed);
+		if (isBufferOverflowed)
 		{
 			delete [] pDestText;
 			return;
