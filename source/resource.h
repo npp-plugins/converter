@@ -18,8 +18,8 @@
 #ifndef RESOURCE_H
 #define RESOURCE_H
 
-#define VERSION_VALUE "4.6\0"
-#define VERSION_DIGITALVALUE 4, 6, 0, 0
+#define VERSION_VALUE "4.7\0"
+#define VERSION_DIGITALVALUE 4, 7, 0, 0
 
 #ifndef IDC_STATIC
 #define IDC_STATIC	-1
