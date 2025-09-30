@@ -19,4 +19,5 @@ vs.proj/NppPluginConverter.lib
 *.bak
 *.log
 *.tlog
+*.zip
 vs.proj/NppConverter.lib
